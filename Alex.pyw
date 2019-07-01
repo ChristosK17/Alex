@@ -15,19 +15,18 @@ from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 
-owm = pyowm.OWM('a7c502158f1ab652bb2ac41c6de4bc9f')
+owm = pyowm.OWM('API_KEY')
 observation = owm.weather_at_place('Athens,GR')
 
 #ser = serial.Serial('COM4', 9600)
 
-bulb = Bulb("192.168.1.9")
+bulb = Bulb("BULB_IP")
 
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 
 def say(txt):
-	call(["C:\Program Files (x86)\eSpeak\command_line\espeak", txt])
+	call(["C:\Program Files (x86)\eSpeak\command_line\espeak", txt]) #eSpeak path
 
-'''
 def recordAudio():
     # Record Audio
     r = sr.Recognizer()
@@ -51,8 +50,8 @@ def recordAudio():
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
  
     return data
-'''
-def getEvents(num):
+
+def getEvents(events_num):
     store = file.Storage('token.json')
     creds = store.get()
     if not creds or creds.invalid:
@@ -61,7 +60,7 @@ def getEvents(num):
     service = build('calendar', 'v3', http=creds.authorize(Http()))
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
     print('Getting the upcoming 10 events')
-    events_result = service.events().list(calendarId='primary', timeMin=now, maxResults=int(num), singleEvents=True, orderBy='startTime').execute()
+    events_result = service.events().list(calendarId='primary', timeMin=now, maxResults=int(events_num), singleEvents=True, orderBy='startTime').execute()
     events = events_result.get('items', [])
 
     if not events:
@@ -160,7 +159,7 @@ while True:
 						url = "https://www.youtube.com/results?search_query="+str(data[5:]).replace(" ","+")
 						webbrowser.open(url)
 						
-					if "potato" in data:
+					if "romance" in data:
 						bulb.turn_off()
 						time.sleep(1)
 						bulb.turn_on(effect="smooth", duration=3000)
