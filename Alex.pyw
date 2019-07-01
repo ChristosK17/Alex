@@ -29,7 +29,7 @@ def say(txt):
 
 def recordAudio():
     # Record Audio
-    r = sr.Recognizer()
+   	r = sr.Recognizer()
 	r.pause_threshold = 0.2
 	r.phrase_threshold = 0.2
 	r.non_speaking_duration = 0.1
